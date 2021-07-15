@@ -79,7 +79,7 @@ def save_model(args, model):
 def check_data_dir(args):
     print("Checking data dir -------------------------------------------------")
     print(args.data_dir)
-    print(os.listdir(data_dir))
+    print(os.listdir(args.data_dir))
     
     print("-------------------------------------------------------------------")
     # print (os.path.abspath(os.path.join('path', os.pardir)))
