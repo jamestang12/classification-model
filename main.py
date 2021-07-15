@@ -7,6 +7,8 @@ import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
 from torchvision import datasets, transforms
+import ssl 
+
 
 def makedir_exist_ok(dirpath):
     """
@@ -74,8 +76,23 @@ def save_model(args, model):
     path = os.path.join(args.result_dir, 'saved_models.pth')
     torch.save(model.state_dict(),path)
 
+def check_data_dir(args):
+    print("Checking data dir -------------------------------------------------")
+    print(args.data_dir)
+    print(os.listdir(data_dir))
+    
+    print("-------------------------------------------------------------------")
+    # print (os.path.abspath(os.path.join('path', os.pardir)))
+    # os.listdir(path)
+
 # python3 main.py --epochs 1 --data-dir $DATA_DIR --result-dir $RESULT_DIR
 def main():
+    try:
+        _create_unverified_https_context = ssl._create_unverified_context
+    except AttributeError:
+        pass
+    else:
+        ssl._create_default_https_context = _create_unverified_https_context
     # Training settings
     parser = argparse.ArgumentParser(description='PyTorch MNIST Example')
     parser.add_argument('--batch-size', type=int, default=64, metavar='N',
@@ -100,6 +117,9 @@ def main():
                         help='directory location to save the result training and model.')
     args = parser.parse_args()
     use_cuda = not args.no_cuda and torch.cuda.is_available()
+    
+
+    check_data_dir(args)
     
 
     torch.manual_seed(args.seed)
