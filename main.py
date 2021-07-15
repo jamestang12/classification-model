@@ -8,6 +8,7 @@ import torch.nn.functional as F
 import torch.optim as optim
 from torchvision import datasets, transforms
 import ssl 
+import zipfile
 
 
 def makedir_exist_ok(dirpath):
@@ -79,8 +80,16 @@ def save_model(args, model):
 def check_data_dir(args):
     print("Checking data dir -------------------------------------------------")
     print(args.data_dir)
-    print(os.listdir(args.data_dir))
-    
+    # print(os.listdir(args.data_dir))
+
+    for item in os.listdir(args.data_dir):
+        if item.endswith(".zip"):
+            path = args.data_dir + "/" + item
+            with zipfile.ZipFile(path, 'r') as zip_ref:
+                newDir = args.data_dir + "/zip"
+                os.makedirs(newDir)
+                zip_ref.extractall(newDir)
+                print(os.listdir(newDir + "/images"))
     print("-------------------------------------------------------------------")
     # print (os.path.abspath(os.path.join('path', os.pardir)))
     # os.listdir(path)
